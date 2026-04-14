@@ -1,0 +1,11 @@
+/**:
+  ros__parameters:
+
+    master_res: "/left/vision_send_res"
+    slave_res: "/right/vision_send_res"
+
+    master_send_res: "/left/vision_send_data"
+    slave_send_res: "/right/vision_send_data"
+
+    use_cross_fire: false
+    master_to_slave_offset: 0.335

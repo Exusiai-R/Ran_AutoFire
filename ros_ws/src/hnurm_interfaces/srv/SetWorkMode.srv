@@ -1,0 +1,6 @@
+# Request
+hnurm_interfaces/WorkMode work_mode
+---
+# Response
+bool success
+string message

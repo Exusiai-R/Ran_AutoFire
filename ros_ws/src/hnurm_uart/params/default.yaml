@@ -1,0 +1,14 @@
+/**:
+  ros__parameters:
+    channel_delay: 0.0
+
+    recv_topic: "vision_recv_data"
+    send_topic: "vision_send_data"
+
+    use_control_id: false
+    control_id: -1.0 # or -1
+
+    use_distribution: true
+    master_ns: main   #no use master ns to distribute
+    slave_ns: back_camera
+    decision_send_topic: "/decision/vision_send_data"

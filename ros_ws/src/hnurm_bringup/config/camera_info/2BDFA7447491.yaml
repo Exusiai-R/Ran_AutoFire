@@ -1,0 +1,26 @@
+image_width: 1440
+image_height: 1080
+camera_name: 2BDFA7447491
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [2392.15579,    0.     ,  711.05636,
+            0.     , 2391.64768,  552.64091,
+            0.     ,    0.     ,    1.     ]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [-0.090274, 0.508204, -0.002356, 0.001083, -1.501715]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1., 0., 0.,
+         0., 1., 0.,
+         0., 0., 1.]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [2378.60181,    0.     ,  711.23057,    0.     ,
+            0.     , 2381.25513,  551.3234 ,    0.     ,
+            0.     ,    0.     ,    1.     ,    0.     ]

@@ -1,0 +1,10 @@
+/**:
+  ros__parameters:
+    robot: "default"
+    camera_id: "2BDFA7447491"
+    camera_info_url: "package://hnurm_bringup/config/camera_info/2BDFA7447491.yaml"
+    virtual_camera: false
+    virtual_uart: false
+    rune: false
+    lob: false
+    navigation: false

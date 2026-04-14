@@ -1,0 +1,48 @@
+/**:
+  ros__parameters:
+    # todo: 图像旋转，水平垂直合并，下采样，伽马矫正，帧率控制，自动增益上下限，自动曝光，自动曝光上下限，触发方式，对比度调节
+    # todo: camerainfo，触发方式，缓存空间，时间戳，消除不必要的拷贝，心跳检测
+    image_orientation: 0
+    # 图像宽度:步进16
+    nWidth: 1440
+    # 图像高度：步进2
+    nHeight: 1080
+    # 水平偏移
+    nOffsetX: 0
+    # 垂直偏移
+    nOffsetY: 0
+    # 水平镜像
+    bReverseX: false 
+    # 垂直镜像
+    bReverseY: false 
+    # 像素格式
+    # 013: 0x0108000A bayer gb8
+    # 013: 0x01100012 bayer gb12
+    # 016: 0x01080009 bayer rg8
+    # 016: 0x01100011 bayer rg12
+    nPixelFormat: 0x01080009
+    # 设置使能采集帧率控制
+    bAcquisitionFrameRateEnable: false
+    # 触发采集帧数
+    nAcquisitionBurstFrameCount: 1
+    # 设置采集帧率
+    fFPS: 404.0000
+    # 曝光时间
+    fExposureTime: 3000.0000   #4000.0
+    # 增益
+    fGain: 4.0000 # 8
+    # 自动增益
+    # 0:Off
+    # 1:Once
+    # 2:Continuous
+    nGainAuto: 0
+    # 黑电平使能
+    bEnableBlackLevel: false
+    # 黑电平
+    nBlackLevelValue: 30
+    # 相机id
+    camera_id: 2BDFA7447491
+    # Bayer转换质量 0: fast 3: best+
+    nBayerCvtQuality: 0
+
+    camera_img_topic: "image"

@@ -1,0 +1,6 @@
+# Request
+hnurm_interfaces/SelfColor self_color
+---
+# Response
+bool success
+string message
