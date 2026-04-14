@@ -35,6 +35,9 @@
 /build
 /log
 /install
+/ros_ws/build
+/ros_ws/log
+/ros_ws/install
 
 # cache files
 *.cache

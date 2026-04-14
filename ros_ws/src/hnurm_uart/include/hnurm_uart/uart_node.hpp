@@ -1,107 +1,36 @@
 #pragma once
-#include <tf2/LinearMath/Quaternion.h>
-#include <tf2_ros/transform_broadcaster.h>
 
-#include <geometry_msgs/msg/transform_stamped.hpp>
-#include <geometry_msgs/msg/twist.hpp>
-#include <hnurm_interfaces/srv/set_self_color.hpp>
-#include <hnurm_interfaces/srv/set_work_mode.hpp>
-#include <nav_msgs/msg/odometry.hpp>
 #include <rclcpp/rclcpp.hpp>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
+#include <thread>
+#include <memory>
+#include <string>
 
+// 引入强大的编解码器
 #include "hnurm_uart/Serialcodec.h"
-#include "tf2_ros/buffer.h"
-#include "tf2_ros/static_transform_broadcaster.h"
+#include <hnurm_interfaces/msg/serial2_vision.hpp>
+#include <hnurm_interfaces/msg/vision2_serial.hpp>
 
 namespace hnurm
 {
-struct init_imu
-{
-  bool  is_init;
-  float yaw;
-  float pitch;
-};
 
 class UartNode : public rclcpp::Node
 {
 public:
-  using UartNodePtr = std::shared_ptr<UartNode>;
-
-  UartNode(const rclcpp::NodeOptions& options)
-  : rclcpp::Node("hnurm_uart_node", options)
-  , logger(get_logger())
-  , serial_codec_(nullptr)
-  {
-  }
-
-  ~UartNode()
-  {
-    delete serial_codec_;
-  }
-
-  UartNode(const UartNode&)            = delete;
-  UartNode& operator=(const UartNode&) = delete;
-  UartNode(UartNode&&)                 = delete;
-  UartNode& operator=(UartNode&&)      = delete;
-  void      run();
-  init_imu  init_imu_{false, 0.0, 0.0};
+  explicit UartNode(const rclcpp::NodeOptions& options = rclcpp::NodeOptions());
+  ~UartNode() override;
 
 private:
-  void sub_callback(hnurm_interfaces::msg::VisionSendData::SharedPtr msg);
-  void decision_sub_callback(hnurm_interfaces::msg::VisionSendData::SharedPtr msg);
-  void sub_twist_callback(geometry_msgs::msg::Twist::SharedPtr msg);
-  void timer_callback();
-  void re_launch();
+  void write_callback(const hnurm_interfaces::msg::Vision2Serial::SharedPtr msg);
+  void read_loop();
 
-private:
-  rclcpp::CallbackGroup::SharedPtr callback_group1_;
-  rclcpp::CallbackGroup::SharedPtr callback_group2_;
+  rclcpp::Publisher<hnurm_interfaces::msg::Serial2Vision>::SharedPtr publisher_;
+  rclcpp::Subscription<hnurm_interfaces::msg::Vision2Serial>::SharedPtr subscriber_;
 
-  rclcpp::Subscription<hnurm_interfaces::msg::VisionSendData>::SharedPtr sub_;
-  rclcpp::Subscription<hnurm_interfaces::msg::VisionSendData>::SharedPtr decision_sub_;
-  rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr             sub_twist_;
-
-  rclcpp::Publisher<hnurm_interfaces::msg::VisionRecvData>::SharedPtr master_pub_;
-  rclcpp::Publisher<hnurm_interfaces::msg::VisionRecvData>::SharedPtr slave_pub;
-
-  // 服务客户端：用于更新 Detect Node 的配置
-  rclcpp::Client<hnurm_interfaces::srv::SetSelfColor>::SharedPtr set_self_color_client_;
-  rclcpp::Client<hnurm_interfaces::srv::SetWorkMode>::SharedPtr  set_work_mode_client_;
-
-  std::thread uart_thread_;
-
-  // tf broadcaster
-  std::shared_ptr<tf2_ros::TransformBroadcaster>       tf_broadcaster_;
-  std::shared_ptr<tf2_ros::StaticTransformBroadcaster> static_broadcaster_;
-
-  rclcpp::TimerBase::SharedPtr timer_;
-  rclcpp::Logger               logger;
-  SerialCodec*                 serial_codec_;
-
-  // topics
-  std::string recv_topic_;
-  std::string send_topic_;
-  bool        use_control_id_ = false;
-
-  bool        use_distribution_    = false;
-  std::string master_ns_           = "left";
-  std::string slave_ns_            = "right";
-  std::string decision_send_topic_ = "/decision/vision_send_data";
-
-  float control_id_ = 0;
-
-  bool stop_flag_ = false;
-  int  error_cnt_ = 0;
-
-  // 缓存上次的配置值，用于检测变化
-  uint8_t last_self_color_{0};
-  uint8_t last_work_mode_{0};
-
-protected:
-  UartNodePtr shared_from_this()
-  {
-    return std::static_pointer_cast<UartNode>(rclcpp::Node::shared_from_this());
-  }
+  // 【核心修改】接管带环形缓冲的编解码器，而不是裸串口
+  std::unique_ptr<SerialCodec> codec_;
+  
+  std::thread read_thread_;
+  bool rclcpp_ok_;
 };
+
 }  // namespace hnurm
