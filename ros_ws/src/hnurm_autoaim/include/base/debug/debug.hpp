@@ -86,7 +86,11 @@ inline void webview_info_add(
     const std::string& content
 ) {
     namespace umt = ::umt;
-    umt::ObjManager<webview_info::Page>::find(page)->sub(group).sub(entry).get() = content;
+    // 【核心修复】：把原来的 find 改成 find_or_create，彻底杜绝空指针！
+    auto ptr = umt::ObjManager<webview_info::Page>::find_or_create(page);
+    if (ptr != nullptr) {
+        ptr->sub(group).sub(entry).get() = content;
+    }
 }
 
 } // namespace base

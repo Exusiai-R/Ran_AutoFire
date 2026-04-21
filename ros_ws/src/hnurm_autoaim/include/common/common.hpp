@@ -1,8 +1,28 @@
 #pragma once
 #include <string>
-#include <map>
+
 namespace base { namespace webview_info {
-struct Entry { std::string value; std::string& get() { return value; } };
-struct Group { std::map<std::string, Entry> entries; Entry& sub(const std::string& name) { return entries[name]; } };
-struct Page { std::map<std::string, Group> groups; Group& sub(const std::string& name) { return groups[name]; } };
+
+// 终极欺骗类：没有任何成员变量，绝不抛出异常，绝不引发段错误
+struct Entry {
+    std::string& get() {
+        static std::string dummy_value;
+        return dummy_value;
+    }
+};
+
+struct Group {
+    Entry& sub(const std::string& /*name*/) {
+        static Entry dummy_entry;
+        return dummy_entry;
+    }
+};
+
+struct Page {
+    Group& sub(const std::string& /*name*/) {
+        static Group dummy_group;
+        return dummy_group;
+    }
+};
+
 }}
