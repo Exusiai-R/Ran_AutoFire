@@ -17,9 +17,8 @@ ament_auto_add_executable(compose_node
         src/compose_node.cpp
 )
 ament_target_dependencies(compose_node
-        armor_solver
+        hnurm_autoaim
         hnurm_uart
-        armor_detector
         hnurm_camera
 )
 

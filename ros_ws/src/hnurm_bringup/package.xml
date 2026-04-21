@@ -17,10 +17,9 @@
     <depend>angles</depend>
 
     <depend>hnurm_interfaces</depend>
-    <depend>armor_detector</depend>
     <depend>hnurm_camera</depend>
     <depend>hnurm_uart</depend>
-    <depend>armor_solver</depend>
+    <depend>hnurm_autoaim</depend>
 
     <test_depend>ament_lint_auto</test_depend>
     <test_depend>ament_lint_common</test_depend>
